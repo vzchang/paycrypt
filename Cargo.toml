@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/paycrypt-dukpt", "crates/paycrypt-pinblock"]
+members = ["crates/paycrypt-dukpt", "crates/paycrypt-pinblock", "crates/paycrypt-wasm"]
 
 [workspace.package]
 edition = "2021"
