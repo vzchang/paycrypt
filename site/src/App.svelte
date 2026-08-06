@@ -4,7 +4,14 @@
   import DukptLadder from "./lib/DukptLadder.svelte";
   import PinBlockStepper from "./lib/PinBlockStepper.svelte";
   import FlowStrip from "./lib/FlowStrip.svelte";
+  import ThemePicker from "./lib/ThemePicker.svelte";
+  import MatrixRain from "./lib/MatrixRain.svelte";
+
+  let theme = "";
 </script>
+
+<MatrixRain active={theme === "matrix"} />
+<ThemePicker bind:active={theme} />
 
 <header class="hero">
   <p class="eyebrow">ANSI X9.24 · ISO 9564 · Rust → WebAssembly</p>

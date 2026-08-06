@@ -28,6 +28,123 @@
   --radius: 8px;
 }
 
+/* ===== terminal theme variants (set on <html data-term="..."> ) ===== */
+
+/* 1 · Phosphor CRT green */
+:root[data-term="green"] {
+  --surface-0: #060a06;
+  --surface-1: #0b120b;
+  --surface-2: #0f1a0f;
+  --border: #1c3a1c;
+  --border-strong: #2f5f2f;
+  --text-primary: #6bff8f;
+  --text-secondary: #33cc5c;
+  --text-muted: #1f7a3a;
+  --accent: #33ff66;
+  --danger: #ff5f56;
+  --role-control: #33ff66;
+  --role-length: #7dffb0;
+  --role-pin: #23c94e;
+  --role-pad: #b6ff6b;
+  --role-pan: #5fffd0;
+  --glow: 0 0 6px rgba(51, 255, 102, 0.55);
+  --sans: var(--mono);
+}
+
+/* 2 · Amber monochrome */
+:root[data-term="amber"] {
+  --surface-0: #140d00;
+  --surface-1: #1c1300;
+  --surface-2: #271a02;
+  --border: #4a3410;
+  --border-strong: #6b4c14;
+  --text-primary: #ffb000;
+  --text-secondary: #d98f13;
+  --text-muted: #8a5f14;
+  --accent: #ffcc44;
+  --danger: #ff6b3d;
+  --role-control: #ffcc44;
+  --role-length: #ff9a3d;
+  --role-pin: #ffb000;
+  --role-pad: #e8d06a;
+  --role-pan: #ff7f50;
+  --glow: 0 0 6px rgba(255, 176, 0, 0.45);
+  --sans: var(--mono);
+}
+
+/* 3 · Modern hacker neon (default when data-term unset falls back to base dark) */
+:root[data-term="neon"] {
+  --surface-0: #0a0a10;
+  --surface-1: #10121b;
+  --surface-2: #171a26;
+  --border: #262a3d;
+  --border-strong: #3a3f5c;
+  --text-primary: #e6f0ff;
+  --text-secondary: #9aa6c7;
+  --text-muted: #5f6987;
+  --accent: #35e0e0;
+  --danger: #ff5d7a;
+  --role-control: #35e0e0;
+  --role-length: #ff5db1;
+  --role-pin: #9fff4d;
+  --role-pad: #ffcf3d;
+  --role-pan: #b18cff;
+  --glow: 0 0 8px rgba(53, 224, 224, 0.5);
+  --sans: var(--mono);
+}
+
+/* 4 · Matrix rain (colors; animated bg added via body::before) */
+:root[data-term="matrix"] {
+  --surface-0: #000600;
+  --surface-1: #041004;
+  --surface-2: #061a06;
+  --border: #0d3d0d;
+  --border-strong: #146414;
+  --text-primary: #4dff4d;
+  --text-secondary: #2ecc2e;
+  --text-muted: #147a14;
+  --accent: #7dff7d;
+  --danger: #ff5555;
+  --role-control: #7dff7d;
+  --role-length: #b6ffb6;
+  --role-pin: #33cc33;
+  --role-pad: #ccff66;
+  --role-pan: #5fffb0;
+  --glow: 0 0 10px rgba(77, 255, 77, 0.7);
+  --sans: var(--mono);
+}
+
+/* Shared terminal treatments (any data-term) */
+:root[data-term] h1,
+:root[data-term] h2 {
+  text-shadow: var(--glow);
+}
+:root[data-term] .hexval .text,
+:root[data-term] .cell .val {
+  text-shadow: var(--glow);
+}
+/* CRT scanlines for green/amber/matrix */
+:root[data-term="green"] body::after,
+:root[data-term="amber"] body::after,
+:root[data-term="matrix"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.18) 0px,
+    rgba(0, 0, 0, 0.18) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+}
+:root[data-term] body {
+  background: var(--surface-0);
+}
+
 * {
   box-sizing: border-box;
 }
