@@ -1,6 +1,7 @@
 <script lang="ts">
   import { version } from "../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
   import DukptLadder from "./lib/DukptLadder.svelte";
+  import PinBlockStepper from "./lib/PinBlockStepper.svelte";
 </script>
 
 <header>
@@ -12,6 +13,7 @@
 </header>
 
 <DukptLadder />
+<PinBlockStepper />
 
 <footer>
   <p>Educational / validation use only. Not for production, not PCI-compliant,

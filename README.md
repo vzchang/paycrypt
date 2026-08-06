@@ -57,10 +57,26 @@ Format 1 has no public known-answer vector, so it is round-trip-verified only
   0-3, and a separate enciphering codec for format 4 (whose PAN block is
   interleaved between two AES passes).
 
+## Live explainer
+
+An interactive explainer (`site/`) runs the **real compiled library** in the
+browser via WebAssembly and animates the DUKPT key ladder and ISO-0 PIN block
+construction, exposing the intermediate derivation state that public
+calculators hide. Every displayed value comes from a WASM call into the actual
+crates, and the WASM step traces are pinned to the library's published test
+vectors.
+
+- WASM crate (`crates/paycrypt-wasm`) builds to a ~40 KB `.wasm` via
+  `wasm-pack`; step-DTO logic is covered by native tests.
+- Frontend is a Vite + Svelte app. Build and run it with Node 16+:
+  `cd site && npm install && npm run dev` (see [`site/README.md`](site/README.md)).
+- Live at **https://vzchang.github.io/paycrypt/**, deployed to GitHub Pages by
+  `.github/workflows/site.yml` on every push to `main`.
+
 ## Status
 
 Library v1: TDES + AES DUKPT and ISO 9564 PIN blocks 0-4, tested and CI-gated.
-An interactive WASM explainer is planned as a follow-up.
+The explainer is live and redeploys on every push to `main`.
 
 ## License
 
