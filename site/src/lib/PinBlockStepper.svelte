@@ -69,34 +69,40 @@
     gap: 1rem;
   }
   .frames li {
-    padding: 0.9rem 1rem;
-    background: var(--surface-2);
-    border-radius: 6px;
+    padding: 1rem 1.1rem;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     border-left: 3px solid var(--border-strong);
   }
   .frames li.result {
-    border-left-color: var(--accent);
+    border-left-color: var(--brand);
+    background: var(--brand-weak);
   }
   .head {
     display: flex;
     gap: 0.7rem;
     align-items: baseline;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.65rem;
   }
   .idx {
     font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--surface-0);
-    background: var(--text-muted);
-    border-radius: 4px;
-    padding: 0.05rem 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--ink-3);
+    border-radius: 5px;
+    padding: 0.1rem 0.5rem;
   }
   .result .idx {
-    background: var(--accent);
+    background: var(--brand);
+  }
+  .head strong {
+    color: var(--ink);
   }
   .sub {
     display: block;
-    color: var(--text-muted);
-    font-size: 0.8rem;
+    color: var(--ink-3);
+    font-size: 0.85rem;
   }
 </style>
