@@ -7,57 +7,59 @@
 </script>
 
 <header class="hero">
-  <p class="eyebrow">ANSI X9.24 · ISO 9564 · Rust → WebAssembly</p>
-  <h1>paycrypt</h1>
+  <p class="eyebrow">ANSI X9.24 · ISO 9564</p>
+  <h1>Every swipe mints<br /><span class="gold">a key that dies once.</span></h1>
   <p class="lede">
-    An interactive explainer for payments cryptography. It runs the
-    <strong>real compiled paycrypt library</strong> in your browser via WebAssembly
-    and shows the intermediate derivation state that ordinary calculators hide.
+    Card payments are protected by cryptography that runs in the half-second
+    between tapping your card and the "approved" beep. This page performs that
+    cryptography live in your browser (the real
+    <strong>paycrypt</strong> library, compiled to WebAssembly) and shows you the
+    working most tools keep hidden.
   </p>
-  <p class="ver">{version()}</p>
   <FlowStrip />
 </header>
 
-<DukptLadder />
-<PinBlockStepper />
+<main>
+  <DukptLadder />
+  <PinBlockStepper />
+</main>
 
 <footer>
   <p>
-    Educational / validation use only. Not for production, not PCI-compliant,
-    not audited. Every value is computed by the real library from synthetic test
-    data.
+    Educational use only; not for production, not PCI-compliant, not audited.
+    Every value is derived from synthetic test data by the real library.
   </p>
+  <p class="ver">{version()}</p>
 </footer>
 
 <style>
   .hero {
-    padding: 1rem 0 0.5rem;
+    padding: 0.5rem 0 0.75rem;
   }
   .hero h1 {
-    font-size: 2.6rem;
-    margin: 0.1rem 0 0.6rem;
-    background: linear-gradient(90deg, #ffffff, #86b6ef);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    margin: 0.3rem 0 1rem;
+  }
+  .hero .gold {
+    color: var(--accent);
+    font-style: italic;
   }
   .lede {
     color: var(--text-secondary);
-    font-size: 1.05rem;
-    max-width: 60ch;
+    font-size: 1.12rem;
+    max-width: 56ch;
+  }
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.84rem;
   }
   .ver {
     font-family: var(--mono);
-    font-size: 0.75rem;
+    font-size: 0.76rem;
     color: var(--text-muted);
-    margin-top: 0.8rem;
-  }
-  footer {
-    margin-top: 2.5rem;
-    padding-top: 1.2rem;
-    border-top: 1px solid var(--border);
-    color: var(--text-muted);
-    font-size: 0.82rem;
-    max-width: 66ch;
+    margin-top: 0.4rem;
   }
 </style>

@@ -80,11 +80,12 @@
   }
   .cell.changed .val {
     font-weight: 700;
+    color: var(--accent-bright);
   }
   @keyframes pop {
     from {
       transform: scale(0.9);
-      box-shadow: 0 0 0 4px rgba(57, 135, 229, 0.45);
+      box-shadow: 0 0 0 4px rgba(212, 175, 106, 0.5);
     }
     to {
       transform: scale(1);

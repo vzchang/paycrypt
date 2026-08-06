@@ -107,7 +107,7 @@
   }
   .dot.result {
     background: var(--accent);
-    box-shadow: 0 0 0 4px rgba(57, 135, 229, 0.2);
+    box-shadow: 0 0 0 4px rgba(212, 175, 106, 0.22);
   }
   .line {
     width: 2px;
@@ -128,11 +128,11 @@
     font-size: 0.8rem;
   }
   .result .head strong {
-    color: #86b6ef;
+    color: var(--accent-bright);
   }
   @media (prefers-reduced-motion: reduce) {
     .dot.result {
-      box-shadow: 0 0 0 3px rgba(57, 135, 229, 0.3);
+      box-shadow: 0 0 0 3px rgba(212, 175, 106, 0.3);
     }
   }
 </style>

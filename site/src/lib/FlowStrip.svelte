@@ -29,7 +29,7 @@
     flex-wrap: wrap;
     gap: 0.4rem;
     margin: 1.4rem 0 0.4rem;
-    padding: 0.9rem 1rem;
+    padding: 0.95rem 1.1rem;
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -37,25 +37,25 @@
   .stage {
     font-family: var(--mono);
     font-size: 0.74rem;
-    padding: 0.3rem 0.6rem;
-    border-radius: 5px;
+    padding: 0.32rem 0.62rem;
+    border-radius: 6px;
     background: var(--surface-2);
     color: var(--text-muted);
     white-space: nowrap;
   }
   .stage.impl {
-    background: rgba(57, 135, 229, 0.14);
-    color: #86b6ef;
-    border: 1px solid rgba(57, 135, 229, 0.35);
+    background: var(--accent-dim);
+    color: var(--accent-bright);
+    border: 1px solid rgba(212, 175, 106, 0.4);
   }
   .arrow {
     color: var(--border-strong);
     font-size: 0.8rem;
   }
   .flow-key {
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     color: var(--text-muted);
-    margin: 0.4rem 0 0;
+    margin: 0.5rem 0 0;
   }
   .chip {
     display: inline-block;
@@ -66,7 +66,7 @@
     vertical-align: -1px;
   }
   .chip.impl {
-    background: rgba(57, 135, 229, 0.5);
-    border: 1px solid rgba(57, 135, 229, 0.6);
+    background: var(--accent);
+    border: 1px solid var(--accent-bright);
   }
 </style>

@@ -86,13 +86,15 @@
   .idx {
     font-family: var(--mono);
     font-size: 0.72rem;
+    font-weight: 700;
     color: var(--surface-0);
     background: var(--text-muted);
     border-radius: 4px;
-    padding: 0.05rem 0.4rem;
+    padding: 0.08rem 0.45rem;
   }
   .result .idx {
     background: var(--accent);
+    color: var(--surface-0);
   }
   .sub {
     display: block;

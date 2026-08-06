@@ -47,7 +47,7 @@
   }
   .bit.set {
     background: var(--accent);
-    color: #fff;
+    color: var(--surface-0);
     font-weight: 700;
   }
   .bit.active {
