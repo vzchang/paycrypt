@@ -149,7 +149,10 @@ impl AesKsn {
     /// Parse from a 24-character hex string.
     pub fn from_hex(s: &str) -> Result<Self, AesKsnError> {
         let bytes = codec::from_hex(s).map_err(|_| AesKsnError::BadLength)?;
-        let arr: [u8; 12] = bytes.as_slice().try_into().map_err(|_| AesKsnError::BadLength)?;
+        let arr: [u8; 12] = bytes
+            .as_slice()
+            .try_into()
+            .map_err(|_| AesKsnError::BadLength)?;
         Ok(Self(arr))
     }
 
@@ -185,9 +188,15 @@ impl core::fmt::Debug for AesKsn {
 fn aes_encrypt_block(key: &[u8], block: &[u8; 16]) -> [u8; 16] {
     let mut buf = *block;
     match key.len() {
-        16 => Aes128::new_from_slice(key).unwrap().encrypt_block((&mut buf).into()),
-        24 => Aes192::new_from_slice(key).unwrap().encrypt_block((&mut buf).into()),
-        32 => Aes256::new_from_slice(key).unwrap().encrypt_block((&mut buf).into()),
+        16 => Aes128::new_from_slice(key)
+            .unwrap()
+            .encrypt_block((&mut buf).into()),
+        24 => Aes192::new_from_slice(key)
+            .unwrap()
+            .encrypt_block((&mut buf).into()),
+        32 => Aes256::new_from_slice(key)
+            .unwrap()
+            .encrypt_block((&mut buf).into()),
         _ => panic!("invalid AES key length"),
     }
     buf

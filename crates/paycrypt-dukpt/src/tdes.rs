@@ -111,8 +111,8 @@ pub fn derive_transaction_key(ipek: &InitialKey, ksn: &TdesKsn) -> TransactionKe
     let mut shift_reg: u32 = 0x10_0000; // bit 20 (MSB of the 21-bit counter)
     while shift_reg > 0 {
         if (shift_reg & counter) != 0 {
-            let tail = u32::from_be_bytes([ksn_reg[4], ksn_reg[5], ksn_reg[6], ksn_reg[7]])
-                | shift_reg;
+            let tail =
+                u32::from_be_bytes([ksn_reg[4], ksn_reg[5], ksn_reg[6], ksn_reg[7]]) | shift_reg;
             ksn_reg[4..8].copy_from_slice(&tail.to_be_bytes());
             cur_key = generate_key(&cur_key, &ksn_reg);
         }

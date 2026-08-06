@@ -116,11 +116,7 @@ fn format_xor(
     Ok(ClearPinBlock::from_bytes(xor8(&pin_field, &acct)))
 }
 
-fn parse_xor(
-    control: u8,
-    block: &ClearPinBlock,
-    pan: Option<&Pan>,
-) -> Result<Pin, PinError> {
+fn parse_xor(control: u8, block: &ClearPinBlock, pan: Option<&Pan>) -> Result<Pin, PinError> {
     let pan = pan.ok_or(PinError::PanRequired)?;
     let field = xor8(block.as_bytes(), &account_field(pan));
     parse_pin_field(control, &field)

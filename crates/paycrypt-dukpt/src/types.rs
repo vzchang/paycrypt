@@ -4,9 +4,7 @@ use crate::codec;
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 /// Clears the 21-bit counter from a KSN, leaving the IKSN (ANSI X9.24-1).
-const KSN_COUNTER_CLEAR: [u8; 10] = [
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xE0, 0x00, 0x00,
-];
+const KSN_COUNTER_CLEAR: [u8; 10] = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xE0, 0x00, 0x00];
 
 const COUNTER_MASK: u32 = 0x1F_FFFF;
 
@@ -113,8 +111,7 @@ impl TdesKsn {
 impl TdesKsn {
     fn with_counter(&self, counter: u32) -> Self {
         let mut bytes = self.0;
-        let cleared =
-            u32::from_be_bytes([bytes[6], bytes[7], bytes[8], bytes[9]]) & !COUNTER_MASK;
+        let cleared = u32::from_be_bytes([bytes[6], bytes[7], bytes[8], bytes[9]]) & !COUNTER_MASK;
         let combined = cleared | (counter & COUNTER_MASK);
         bytes[6..10].copy_from_slice(&combined.to_be_bytes());
         Self(bytes)

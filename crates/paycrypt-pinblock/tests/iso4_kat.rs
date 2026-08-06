@@ -24,5 +24,8 @@ fn iso4_decipher_psec() {
     let key = hex!("00112233445566778899AABBCCDDEEFF");
     let block = EncryptedPinBlock::from_bytes(hex!("E4BE5B623AF7E006AC319E5B93544564"));
     let pan = Pan::new("1234567890123456").unwrap();
-    assert_eq!(Iso4.decipher(&key, &block, &pan).unwrap(), Pin::new("1234").unwrap());
+    assert_eq!(
+        Iso4.decipher(&key, &block, &pan).unwrap(),
+        Pin::new("1234").unwrap()
+    );
 }

@@ -33,7 +33,12 @@ fn aes_pin_working_keys() {
         (8675309u32, "D1DDA386AA4A556AF0119FDCB5D132C6"),
     ] {
         let ksn = ksn_for(counter);
-        let wk = derive_working_key(ik.as_bytes(), &ksn, KeyUsage::PinEncryption, KeyType::Aes128);
+        let wk = derive_working_key(
+            ik.as_bytes(),
+            &ksn,
+            KeyUsage::PinEncryption,
+            KeyType::Aes128,
+        );
         assert_eq!(
             to_hex_upper(wk.as_bytes()),
             expected,
