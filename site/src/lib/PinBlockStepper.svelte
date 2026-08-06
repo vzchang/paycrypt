@@ -19,21 +19,33 @@
   }
 </script>
 
-<section>
-  <h2>ISO 9564 format-0 PIN block</h2>
-  <p class="demo">Demo data only: never enter real PINs or PANs.</p>
+<section class="panel">
+  <p class="eyebrow">PIN block · ISO 9564 format 0 (ANSI X9.8)</p>
+  <h2>Binding the PIN to the account</h2>
+  <span class="demo-tag">demo data: never enter real PINs or PANs</span>
 
-  <label>PIN <input bind:value={pin} size="14" spellcheck="false" /></label>
-  <label>PAN <input bind:value={pan} size="22" spellcheck="false" /></label>
-  <label><input type="checkbox" bind:checked={binary} /> show binary</label>
+  <p class="note">
+    The PIN field and an account field derived from the PAN are XORed together,
+    so the same PIN on a different account never produces the same block.
+  </p>
+
+  <label class="field"><span>PIN</span><input bind:value={pin} spellcheck="false" /></label>
+  <label class="field"><span>PAN</span><input bind:value={pan} spellcheck="false" /></label>
+  <label class="toggle"><input type="checkbox" bind:checked={binary} /> show binary</label>
 
   {#if steps.length === 0}
     <p class="err">Invalid PIN or PAN.</p>
   {:else}
     <ol class="frames">
       {#each steps as step, i}
-        <li>
-          <div class="head"><strong>{step.label}</strong>: {step.note}</div>
+        <li class:result={i === steps.length - 1}>
+          <div class="head">
+            <span class="idx">{i + 1}</span>
+            <div>
+              <strong>{step.label}</strong>
+              <span class="sub">{step.note}</span>
+            </div>
+          </div>
           <ByteGrid
             bytes={new Uint8Array(step.bytes)}
             prev={i > 0 ? new Uint8Array(steps[i - 1].bytes) : null}
@@ -47,12 +59,43 @@
 </section>
 
 <style>
-  section { max-width: 640px; }
-  .demo { color: #a15; font-size: 0.85rem; }
-  label { display: block; margin: 0.5rem 0; }
-  .frames { list-style: none; padding: 0; }
-  .frames li { margin: 0.75rem 0; padding: 0.5rem; border-left: 3px solid #ccd; }
-  .head { color: #555; margin-bottom: 0.35rem; }
-  .hex { font-family: ui-monospace, monospace; color: #333; }
-  .err { color: #a00; }
+  .frames {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .frames li {
+    padding: 0.9rem 1rem;
+    background: var(--surface-2);
+    border-radius: 6px;
+    border-left: 3px solid var(--border-strong);
+  }
+  .frames li.result {
+    border-left-color: var(--accent);
+  }
+  .head {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+  }
+  .idx {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--surface-0);
+    background: var(--text-muted);
+    border-radius: 4px;
+    padding: 0.05rem 0.4rem;
+  }
+  .result .idx {
+    background: var(--accent);
+  }
+  .sub {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
 </style>

@@ -1,0 +1,214 @@
+/* paycrypt explainer: console-dark design system. */
+
+:root {
+  color-scheme: dark;
+
+  --surface-0: #111110; /* page */
+  --surface-1: #1a1a19; /* panels */
+  --surface-2: #242422; /* raised cells */
+  --border: #34332f;
+  --border-strong: #4a4843;
+
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8a8980;
+
+  --accent: #3987e5;
+  --danger: #e66767;
+
+  /* nibble-role hues; each cell also carries a text label */
+  --role-control: #3987e5;
+  --role-length: #d95926;
+  --role-pin: #199e70;
+  --role-pad: #c98500;
+  --role-pan: #d55181;
+
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 70% -10%, #1d2633 0%, transparent 60%),
+    var(--surface-0);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+h1,
+h2 {
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* --- panels --- */
+.panel {
+  background: linear-gradient(180deg, var(--surface-1), #171716);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.panel h2 {
+  margin: 0 0 0.2rem;
+  font-size: 1.15rem;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 0.9rem;
+}
+
+.demo-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: #f0c674;
+  background: rgba(240, 198, 116, 0.08);
+  border: 1px solid rgba(240, 198, 116, 0.25);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  margin-bottom: 1rem;
+}
+
+/* --- form controls --- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.85rem 0;
+}
+
+.field > span {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+input[type="text"],
+input:not([type]) {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  width: 100%;
+}
+
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+  width: 100%;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+/* --- stepper --- */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 1.1rem 0 0.4rem;
+  flex-wrap: wrap;
+}
+
+.stepper button {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
+  cursor: pointer;
+}
+
+.stepper button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.stepper button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepper .pos {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  margin: 0.6rem 0;
+}
+
+.hex {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.err {
+  color: var(--danger);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+/* --- legend --- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0.9rem 0 0.2rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.legend .swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 3px;
+  margin-right: 0.35rem;
+  vertical-align: -1px;
+}
