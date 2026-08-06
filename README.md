@@ -78,6 +78,11 @@ vectors.
 Library v1: TDES + AES DUKPT and ISO 9564 PIN blocks 0-4, tested and CI-gated.
 The explainer is live and redeploys on every push to `main`.
 
+## Project docs
+
+- [CHANGELOG.md](CHANGELOG.md): what has landed.
+- [SECURITY.md](SECURITY.md): threat model and non-goals.
+
 ## License
 
 Licensed under either of [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE) at

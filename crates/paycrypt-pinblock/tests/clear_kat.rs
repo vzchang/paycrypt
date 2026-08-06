@@ -88,13 +88,15 @@ fn iso3_roundtrip_fixedrng() {
     assert_eq!(Iso3.parse(&block, Some(&pan)).unwrap(), pin);
 }
 
-// Format 1: round-trip only; there's no published vector.
+// Format 1 has no published vector, so this pins the library's own output as a
+// regression fixture; the round-trip and control-nibble checks carry correctness.
 
 #[test]
-fn iso1_roundtrip_fixedrng() {
+fn iso1_regression_fixedrng() {
     let pin = Pin::new("987654").unwrap();
     let mut rng = FixedRng::new(&hex!("0102030405060708"));
     let block = Iso1.format(&pin, None, &mut rng).unwrap();
+    assert_eq!(block.as_bytes(), &hex!("1698765412345678"));
     assert_eq!(block.as_bytes()[0] >> 4, 1, "control nibble is 1");
     assert_eq!(Iso1.parse(&block, None).unwrap(), pin);
 }
