@@ -122,6 +122,43 @@ fn parse_xor(control: u8, block: &ClearPinBlock, pan: Option<&Pan>) -> Result<Pi
     parse_pin_field(control, &field)
 }
 
+/// One frame of ISO-0 PIN-block assembly, for the interactive explainer.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Step {
+    /// Short label for the frame.
+    pub label: alloc::string::String,
+    /// The 8-byte field value at this step.
+    pub bytes: [u8; 8],
+    /// Human-readable explanation.
+    pub note: alloc::string::String,
+}
+
+/// Step-instrumented ISO-0 construction for the explainer.
+pub fn format_iso0_steps(pin: &Pin, pan: &Pan) -> (alloc::vec::Vec<Step>, ClearPinBlock) {
+    let pin_field = pack_nibbles(&build_pin_field(0, pin, || 0x0F).expect("valid pin"));
+    let acct = account_field(pan);
+    let xored = xor8(&pin_field, &acct);
+
+    let steps = alloc::vec![
+        Step {
+            label: "PIN field".into(),
+            bytes: pin_field,
+            note: "control 0 | length | PIN digits | F padding".into(),
+        },
+        Step {
+            label: "account field".into(),
+            bytes: acct,
+            note: "0000 | rightmost 12 PAN digits (excluding the Luhn check digit)".into(),
+        },
+        Step {
+            label: "PIN field XOR account field".into(),
+            bytes: xored,
+            note: "the clear ISO-0 PIN block".into(),
+        },
+    ];
+    (steps, ClearPinBlock::from_bytes(xored))
+}
+
 impl ClearPinBlockCodec for Iso0 {
     fn format(
         &self,
