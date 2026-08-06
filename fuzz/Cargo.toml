@@ -1,0 +1,31 @@
+[package]
+name = "paycrypt-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+paycrypt-dukpt = { path = "../crates/paycrypt-dukpt" }
+paycrypt-pinblock = { path = "../crates/paycrypt-pinblock" }
+
+[[bin]]
+name = "from_hex"
+path = "fuzz_targets/from_hex.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "parse_ksn"
+path = "fuzz_targets/parse_ksn.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "decode_pinblock"
+path = "fuzz_targets/decode_pinblock.rs"
+test = false
+doc = false
