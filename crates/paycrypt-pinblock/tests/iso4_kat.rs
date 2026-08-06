@@ -29,3 +29,12 @@ fn iso4_decipher_psec() {
         Pin::new("1234").unwrap()
     );
 }
+
+#[test]
+fn over_long_pan_errors_not_panics() {
+    let key = hex!("00112233445566778899AABBCCDDEEFF");
+    let pin = Pin::new("1234").unwrap();
+    let pan = Pan::new("12345678901234567890").unwrap();
+    let mut rng = FixedRng::new(&hex!("2F69ADDE2E9E7ACE"));
+    assert!(Iso4.encipher(&key, &pin, &pan, &mut rng).is_err());
+}

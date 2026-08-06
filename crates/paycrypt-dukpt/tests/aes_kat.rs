@@ -17,7 +17,7 @@ fn ksn_for(counter: u32) -> AesKsn {
 
 #[test]
 fn aes_initial_key() {
-    let ik = derive_initial_key(&BDK_128, &IK_ID, KeyType::Aes128);
+    let ik = derive_initial_key(&BDK_128, &IK_ID, KeyType::Aes128).unwrap();
     assert_eq!(
         ik.as_bytes(),
         &hex_literal::hex!("1273671EA26AC29AFA4D1084127652A1")[..]
@@ -26,7 +26,7 @@ fn aes_initial_key() {
 
 #[test]
 fn aes_pin_working_keys() {
-    let ik = derive_initial_key(&BDK_128, &IK_ID, KeyType::Aes128);
+    let ik = derive_initial_key(&BDK_128, &IK_ID, KeyType::Aes128).unwrap();
     // 8675309 (0x845FED) sets many bits, so it walks the full intermediate-key ladder.
     for (counter, expected) in [
         (1u32, "AF8CB133A78F8DC2D1359F18527593FB"),
@@ -38,11 +38,18 @@ fn aes_pin_working_keys() {
             &ksn,
             KeyUsage::PinEncryption,
             KeyType::Aes128,
-        );
+        )
+        .unwrap();
         assert_eq!(
             to_hex_upper(wk.as_bytes()),
             expected,
             "PIN working key mismatch for counter {counter}"
         );
     }
+}
+
+#[test]
+fn bad_key_length_errors_not_panics() {
+    let bad = [0u8; 15];
+    assert!(derive_initial_key(&bad, &IK_ID, KeyType::Aes128).is_err());
 }

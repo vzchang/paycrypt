@@ -185,41 +185,69 @@ impl core::fmt::Debug for AesKsn {
     }
 }
 
-fn aes_encrypt_block(key: &[u8], block: &[u8; 16]) -> [u8; 16] {
+/// Error from AES DUKPT derivation.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
+pub enum AesError {
+    /// A supplied key was not 16, 24, or 32 bytes.
+    BadKeyLength,
+}
+
+impl core::fmt::Display for AesError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("AES key must be 16, 24, or 32 bytes")
+    }
+}
+
+impl core::error::Error for AesError {}
+
+fn aes_encrypt_block(key: &[u8], block: &[u8; 16]) -> Result<[u8; 16], AesError> {
     let mut buf = *block;
     match key.len() {
         16 => Aes128::new_from_slice(key)
-            .unwrap()
+            .map_err(|_| AesError::BadKeyLength)?
             .encrypt_block((&mut buf).into()),
         24 => Aes192::new_from_slice(key)
-            .unwrap()
+            .map_err(|_| AesError::BadKeyLength)?
             .encrypt_block((&mut buf).into()),
         32 => Aes256::new_from_slice(key)
-            .unwrap()
+            .map_err(|_| AesError::BadKeyLength)?
             .encrypt_block((&mut buf).into()),
-        _ => panic!("invalid AES key length"),
+        _ => return Err(AesError::BadKeyLength),
     }
-    buf
+    Ok(buf)
 }
 
-fn derive_key(key: &[u8], base_data: &[u8; 16], out_len: usize) -> alloc::vec::Vec<u8> {
+fn derive_key(
+    key: &[u8],
+    base_data: &[u8; 16],
+    out_len: usize,
+) -> Result<alloc::vec::Vec<u8>, AesError> {
     let mut out = alloc::vec::Vec::with_capacity(out_len);
     let mut block_counter: u8 = 1;
     while out.len() < out_len {
         let mut data = *base_data;
         data[1] = block_counter;
-        let block = aes_encrypt_block(key, &data);
+        let block = aes_encrypt_block(key, &data)?;
         out.extend_from_slice(&block);
         block_counter += 1;
     }
     out.truncate(out_len);
-    out
+    Ok(out)
 }
 
 /// Derive the Initial Key (IK) from the BDK and the 8-byte Initial Key ID.
-pub fn derive_initial_key(bdk: &[u8], ik_id: &[u8; 8], ktype: KeyType) -> AesWorkingKey {
+pub fn derive_initial_key(
+    bdk: &[u8],
+    ik_id: &[u8; 8],
+    ktype: KeyType,
+) -> Result<AesWorkingKey, AesError> {
     let data = derivation_data(KeyUsage::InitialKeyDerivation, ktype, 1, ik_id);
-    AesWorkingKey::new(derive_key(bdk, &data, ktype.byte_len()))
+    Ok(AesWorkingKey::new(derive_key(
+        bdk,
+        &data,
+        ktype.byte_len(),
+    )?))
 }
 
 /// Derive a per-transaction working key from the Initial Key and KSN.
@@ -228,7 +256,7 @@ pub fn derive_working_key(
     ksn: &AesKsn,
     usage: KeyUsage,
     ktype: KeyType,
-) -> AesWorkingKey {
+) -> Result<AesWorkingKey, AesError> {
     let ik_id = ksn.initial_key_id();
     let counter = ksn.transaction_counter();
 
@@ -243,7 +271,7 @@ pub fn derive_working_key(
             ksn_data[4..8].copy_from_slice(&applied.to_be_bytes());
             // Intermediate derivations carry the IK's key type (X9.24-3).
             let data = derivation_data(KeyUsage::KeyDerivation, ktype, 1, &ksn_data);
-            cur = derive_key(&cur, &data, ktype.byte_len());
+            cur = derive_key(&cur, &data, ktype.byte_len())?;
         }
         bit >>= 1;
     }
@@ -252,7 +280,11 @@ pub fn derive_working_key(
     ksn_data[..4].copy_from_slice(&ik_id[4..8]);
     ksn_data[4..8].copy_from_slice(&counter.to_be_bytes());
     let data = derivation_data(usage, ktype, 1, &ksn_data);
-    AesWorkingKey::new(derive_key(&cur, &data, ktype.byte_len()))
+    Ok(AesWorkingKey::new(derive_key(
+        &cur,
+        &data,
+        ktype.byte_len(),
+    )?))
 }
 
 #[cfg(test)]

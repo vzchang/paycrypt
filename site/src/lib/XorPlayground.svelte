@@ -1,19 +1,13 @@
 <script lang="ts">
   import { iso0_steps } from "../../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
-  import { type Step } from "./dukpt";
+  import { safeSteps, type Step } from "./dukpt";
 
   let pin = "1234";
   let pan = "5555555551234567";
   let hover: number | null = null;
 
   let steps: Step[] = [];
-  $: {
-    try {
-      steps = iso0_steps(pin, pan) as Step[];
-    } catch {
-      steps = [];
-    }
-  }
+  $: steps = safeSteps(() => iso0_steps(pin, pan));
   // steps: [PIN field, account field, XOR result]
   $: pinField = steps[0]?.bytes ?? [];
   $: acctField = steps[1]?.bytes ?? [];
@@ -32,7 +26,7 @@
   const bn = (v: number) => v.toString(2).padStart(4, "0");
 </script>
 
-<section class="panel wide">
+<section class="panel">
   <p class="eyebrow">Interactive · XOR</p>
   <h2>Why the same PIN never repeats</h2>
   <p class="note">

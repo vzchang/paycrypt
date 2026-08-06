@@ -78,7 +78,8 @@ fn build_pin_field(pin: &Pin, rng: &mut dyn Rng) -> Result<[u8; 16], PinError> {
 
 fn build_pan_block(pan: &Pan) -> Result<[u8; 16], PinError> {
     let pan_bytes = pan.as_str().as_bytes();
-    if pan_bytes.len() < 12 {
+    // Format 4 PANs are 12-19 digits; anything else overflows M or the buffer.
+    if pan_bytes.len() < 12 || pan_bytes.len() > 19 {
         return Err(PinError::BadBlock);
     }
     let m = (pan_bytes.len() - 12) as u8;

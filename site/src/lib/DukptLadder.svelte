@@ -3,21 +3,15 @@
   import ByteGrid from "./ByteGrid.svelte";
   import KsnBar from "./KsnBar.svelte";
   import HexValue from "./HexValue.svelte";
-  import { ksnHex, type Step } from "./dukpt";
+  import { ksnHex, safeSteps, DEMO_BDK, type Step } from "./dukpt";
 
   // Synthetic demo values (the canonical published test vector).
-  let bdk = "0123456789ABCDEFFEDCBA9876543210";
+  let bdk = DEMO_BDK;
   let counter = 3;
   let binary = false;
 
   let steps: Step[] = [];
-  $: {
-    try {
-      steps = tdes_ladder_steps(bdk, ksnHex(counter)) as Step[];
-    } catch {
-      steps = [];
-    }
-  }
+  $: steps = safeSteps(() => tdes_ladder_steps(bdk, ksnHex(counter)));
   $: popcount = counter.toString(2).split("").filter((x) => x === "1").length;
 </script>
 

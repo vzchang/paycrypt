@@ -1,20 +1,14 @@
 <script lang="ts">
   import { tdes_ladder_steps } from "../../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
-  import { ksnHex, type Step } from "./dukpt";
+  import { ksnHex, safeSteps, DEMO_BDK, type Step } from "./dukpt";
 
-  const BDK = "0123456789ABCDEFFEDCBA9876543210";
+  const BDK = DEMO_BDK;
   let counter = 1;
   let revealed = false;
 
   // One derivation serves both sides: the device holds the IPEK, the host re-derives it from the BDK.
   let steps: Step[] = [];
-  $: {
-    try {
-      steps = tdes_ladder_steps(BDK, ksnHex(counter)) as Step[];
-    } catch {
-      steps = [];
-    }
-  }
+  $: steps = safeSteps(() => tdes_ladder_steps(BDK, ksnHex(counter)));
   $: ipek = steps[0]?.hex ?? "";
   $: key = steps[steps.length - 1]?.hex ?? "";
   $: match = key.length > 0;
@@ -29,7 +23,7 @@
   }
 </script>
 
-<section class="panel wide">
+<section class="panel">
   <p class="eyebrow">The DUKPT guarantee</p>
   <h2>Two parties. Different secrets. Same key.</h2>
   <p class="note">
