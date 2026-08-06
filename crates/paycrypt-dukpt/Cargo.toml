@@ -1,0 +1,29 @@
+[package]
+name = "paycrypt-dukpt"
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "ANSI X9.24 DUKPT (TDES X9.24-1 + AES X9.24-3) key derivation. Educational/validation use."
+keywords = ["dukpt", "payments", "cryptography", "iso9564", "pin"]
+categories = ["cryptography", "no-std"]
+
+[dependencies]
+aes.workspace = true
+des.workspace = true
+cipher.workspace = true
+zeroize.workspace = true
+subtle.workspace = true
+
+[dev-dependencies]
+hex-literal.workspace = true
+proptest.workspace = true
+
+[features]
+default = []
+std = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

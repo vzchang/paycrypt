@@ -1,0 +1,28 @@
+[package]
+name = "paycrypt-pinblock"
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "ISO 9564 PIN block formats 0-4. Educational/validation use."
+keywords = ["iso9564", "pinblock", "payments", "cryptography", "pin"]
+categories = ["cryptography", "no-std"]
+
+[dependencies]
+aes.workspace = true
+cipher.workspace = true
+zeroize.workspace = true
+subtle.workspace = true
+
+[dev-dependencies]
+hex-literal.workspace = true
+proptest.workspace = true
+
+[features]
+default = []
+std = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

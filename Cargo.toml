@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+members = ["crates/paycrypt-dukpt", "crates/paycrypt-pinblock"]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/vzchang/paycrypt"
+authors = ["vzchang"]
+
+[workspace.dependencies]
+aes = "0.9"
+des = "0.9"
+cipher = "0.5.2"
+zeroize = { version = "1.9", features = ["derive"] }
+subtle = "2.6"
+hex-literal = "1.1"
+proptest = "1.11"
