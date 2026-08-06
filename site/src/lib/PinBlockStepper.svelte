@@ -5,17 +5,18 @@
   type Step = { label: string; bytes: number[]; hex: string; note: string };
 
   // Synthetic demo values (the canonical psec ISO-0 vector).
-  let pin = $state("1234");
-  let pan = $state("5555555551234567");
-  let binary = $state(false);
+  let pin = "1234";
+  let pan = "5555555551234567";
+  let binary = false;
 
-  let steps = $derived.by<Step[]>(() => {
+  let steps: Step[] = [];
+  $: {
     try {
-      return iso0_steps(pin, pan) as Step[];
+      steps = iso0_steps(pin, pan) as Step[];
     } catch {
-      return [];
+      steps = [];
     }
-  });
+  }
 </script>
 
 <section>

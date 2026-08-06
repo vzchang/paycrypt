@@ -1,10 +1,8 @@
 <script lang="ts">
   // Changed bytes are marked with text as well as colour.
-  let {
-    bytes,
-    prev = null,
-    binary = false,
-  }: { bytes: Uint8Array; prev?: Uint8Array | null; binary?: boolean } = $props();
+  export let bytes: Uint8Array;
+  export let prev: Uint8Array | null = null;
+  export let binary = false;
 
   function changed(i: number): boolean {
     return prev != null && prev[i] !== bytes[i];

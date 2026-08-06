@@ -11,12 +11,16 @@ calculator hides. Live at **https://vzchang.github.io/paycrypt/**.
   `wasm-pack build` produces a ~40 KB `.wasm` plus TypeScript declarations for
   `tdes_ladder_steps`, `iso0_steps`, and `version`. Its DTO logic is covered by
   native tests pinned to the library's published KATs.
-- The frontend (this `site/` directory) is a Vite + Svelte app; see Local dev below.
+- The frontend (this `site/` directory) **builds and is verified**: `vite build`
+  produces a complete static bundle in `dist/` (HTML + JS + CSS + the real
+  `.wasm`). It uses the Vite 4 / Svelte 4 toolchain, which runs on Node 16+
+  (chosen deliberately so it builds on older-glibc hosts; Vite 5 requires
+  Node 18+ and its `crypto.getRandomValues` global).
 
 ## Local dev
 
 Prerequisites: Rust with the `wasm32-unknown-unknown` target, `wasm-pack`, and
-Node 18+.
+Node 16+.
 
 ```bash
 rustup target add wasm32-unknown-unknown

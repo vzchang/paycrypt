@@ -5,31 +5,27 @@
   type Step = { label: string; bytes: number[]; hex: string; note: string };
 
   // Synthetic demo values (the canonical published test vector).
-  let bdk = $state("0123456789ABCDEFFEDCBA9876543210");
-  let counter = $state(3);
-  let stepIndex = $state(0);
-  let binary = $state(false);
+  let bdk = "0123456789ABCDEFFEDCBA9876543210";
+  let counter = 3;
+  let stepIndex = 0;
+  let binary = false;
 
   function ksnHex(c: number): string {
     // IKSN FFFF9876543210E0 0000 with the 21-bit counter in the low bits.
     return "FFFF9876543210E0" + c.toString(16).toUpperCase().padStart(4, "0");
   }
 
-  let steps = $derived.by<Step[]>(() => {
+  let steps: Step[] = [];
+  $: {
     try {
-      return tdes_ladder_steps(bdk, ksnHex(counter)) as Step[];
+      steps = tdes_ladder_steps(bdk, ksnHex(counter)) as Step[];
     } catch {
-      return [];
+      steps = [];
     }
-  });
-
-  // Clamp the visible step when the trace length changes.
-  $effect(() => {
-    if (stepIndex >= steps.length) stepIndex = Math.max(0, steps.length - 1);
-  });
-
-  let current = $derived(steps[stepIndex]);
-  let prev = $derived(stepIndex > 0 ? new Uint8Array(steps[stepIndex - 1].bytes) : null);
+  }
+  $: if (stepIndex >= steps.length) stepIndex = Math.max(0, steps.length - 1);
+  $: current = steps[stepIndex];
+  $: prev = stepIndex > 0 ? new Uint8Array(steps[stepIndex - 1].bytes) : null;
 </script>
 
 <section>
@@ -48,10 +44,10 @@
     <p class="err">Invalid BDK or KSN.</p>
   {:else}
     <div class="stepper" role="group" aria-label="ladder step controls">
-      <button onclick={() => (stepIndex = Math.max(0, stepIndex - 1))}
+      <button on:click={() => (stepIndex = Math.max(0, stepIndex - 1))}
               disabled={stepIndex === 0}>◀ Prev</button>
       <span>step {stepIndex + 1} / {steps.length}: <strong>{current.label}</strong></span>
-      <button onclick={() => (stepIndex = Math.min(steps.length - 1, stepIndex + 1))}
+      <button on:click={() => (stepIndex = Math.min(steps.length - 1, stepIndex + 1))}
               disabled={stepIndex === steps.length - 1}>Next ▶</button>
     </div>
     <p class="note">{current.note}</p>
