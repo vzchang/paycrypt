@@ -1,13 +1,13 @@
 <script lang="ts">
   import { tdes_ladder_steps } from "../../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
   import ByteGrid from "./ByteGrid.svelte";
+  import KsnBar from "./KsnBar.svelte";
 
   type Step = { label: string; bytes: number[]; hex: string; note: string };
 
   // Synthetic demo values (the canonical published test vector).
   let bdk = "0123456789ABCDEFFEDCBA9876543210";
   let counter = 3;
-  let stepIndex = 0;
   let binary = false;
 
   function ksnHex(c: number): string {
@@ -22,9 +22,6 @@
       steps = [];
     }
   }
-  $: if (stepIndex >= steps.length) stepIndex = Math.max(0, steps.length - 1);
-  $: current = steps[stepIndex];
-  $: prev = stepIndex > 0 ? new Uint8Array(steps[stepIndex - 1].bytes) : null;
   $: popcount = counter.toString(2).split("").filter((x) => x === "1").length;
 </script>
 
@@ -36,7 +33,8 @@
   <p class="note">
     The Base Derivation Key never changes. Each set bit of the transaction
     counter runs one non-reversible derivation, so every transaction lands on a
-    different key while the acquirer can re-derive it from the KSN alone.
+    different key, and the acquirer re-derives the same key from the KSN alone.
+    <strong>Every intermediate key below is normally invisible.</strong>
   </p>
 
   <label class="field">
@@ -45,22 +43,95 @@
   </label>
 
   <label class="field">
-    <span>transaction counter: {counter} ({popcount} set {popcount === 1 ? "bit" : "bits"} → {popcount} ladder {popcount === 1 ? "step" : "steps"})</span>
+    <span>transaction counter: {counter} · {popcount} set {popcount === 1 ? "bit" : "bits"} → {popcount} ladder {popcount === 1 ? "derivation" : "derivations"}</span>
     <input type="range" min="1" max="255" bind:value={counter} aria-label="transaction counter" />
   </label>
 
-  <label class="toggle"><input type="checkbox" bind:checked={binary} /> show binary</label>
+  <KsnBar {counter} />
+
+  <label class="toggle"><input type="checkbox" bind:checked={binary} /> show bytes in binary</label>
 
   {#if steps.length === 0}
     <p class="err">Invalid BDK or KSN.</p>
   {:else}
-    <div class="stepper" role="group" aria-label="ladder step controls">
-      <button on:click={() => (stepIndex = Math.max(0, stepIndex - 1))} disabled={stepIndex === 0}>◀ Prev</button>
-      <span class="pos">step {stepIndex + 1} / {steps.length}: <strong>{current.label}</strong></span>
-      <button on:click={() => (stepIndex = Math.min(steps.length - 1, stepIndex + 1))} disabled={stepIndex === steps.length - 1}>Next ▶</button>
-    </div>
-    <p class="note">{current.note}</p>
-    <ByteGrid bytes={new Uint8Array(current.bytes)} {prev} {binary} />
-    <p class="hex">{current.hex}</p>
+    <ol class="ladder">
+      {#each steps as step, i}
+        {@const isLast = i === steps.length - 1}
+        <li class:result={isLast}>
+          <div class="rail" aria-hidden="true">
+            <span class="dot" class:result={isLast}></span>
+            {#if !isLast}<span class="line"></span>{/if}
+          </div>
+          <div class="body">
+            <div class="head">
+              <strong>{step.label}</strong>
+              <span class="sub">{step.note}</span>
+            </div>
+            <ByteGrid
+              bytes={new Uint8Array(step.bytes)}
+              prev={i > 0 ? new Uint8Array(steps[i - 1].bytes) : null}
+              {binary}
+            />
+            <p class="hex">{step.hex}</p>
+          </div>
+        </li>
+      {/each}
+    </ol>
   {/if}
 </section>
+
+<style>
+  .ladder {
+    list-style: none;
+    padding: 0;
+    margin: 1.1rem 0 0;
+  }
+  .ladder li {
+    display: grid;
+    grid-template-columns: 1.4rem 1fr;
+    gap: 0.9rem;
+  }
+  .rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    margin-top: 0.3rem;
+    flex: 0 0 auto;
+  }
+  .dot.result {
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(57, 135, 229, 0.2);
+  }
+  .line {
+    width: 2px;
+    flex: 1 1 auto;
+    background: var(--border-strong);
+    margin: 4px 0;
+  }
+  .body {
+    padding-bottom: 1.3rem;
+    min-width: 0;
+  }
+  .head {
+    margin-bottom: 0.5rem;
+  }
+  .head .sub {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  .result .head strong {
+    color: #86b6ef;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dot.result {
+      box-shadow: 0 0 0 3px rgba(57, 135, 229, 0.3);
+    }
+  }
+</style>
