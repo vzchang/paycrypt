@@ -21,6 +21,10 @@ fn tdes_ipek_matches_moov() {
         let bdk = Bdk::new(hex_literal::hex!("0123456789ABCDEFFEDCBA9876543210"));
         let ksn = TdesKsn::from_hex(ksn_hex).unwrap();
         let ours = to_hex_upper(derive_ipek(&bdk, &ksn).as_bytes());
-        assert_eq!(ours, moov("tdes-ipek", bdk_hex, ksn_hex), "IPEK mismatch vs moov");
+        assert_eq!(
+            ours,
+            moov("tdes-ipek", bdk_hex, ksn_hex),
+            "IPEK mismatch vs moov"
+        );
     }
 }
