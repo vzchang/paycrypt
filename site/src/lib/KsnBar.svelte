@@ -36,19 +36,17 @@
   }
   .bit {
     font-family: var(--mono);
-    font-size: 0.72rem;
-    width: 1.6ch;
+    font-size: 0.7rem;
+    width: 1.4ch;
     text-align: center;
-    padding: 0.3rem 0;
-    border-radius: 4px;
-    background: var(--surface-alt);
-    border: 1px solid var(--border);
-    color: var(--ink-3);
+    padding: 0.25rem 0;
+    border-radius: 3px;
+    background: var(--surface-2);
+    color: var(--text-muted);
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
   }
   .bit.set {
-    background: var(--brand);
-    border-color: var(--brand);
+    background: var(--accent);
     color: #fff;
     font-weight: 700;
   }
@@ -58,14 +56,12 @@
   .caption {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    font-size: 0.78rem;
-    color: var(--ink-3);
-    margin-top: 0.45rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
   }
   .caption .hint b {
-    color: var(--brand);
+    color: var(--accent);
   }
   @media (prefers-reduced-motion: reduce) {
     .bit {

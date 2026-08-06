@@ -101,13 +101,13 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: var(--border-strong);
-    margin-top: 0.35rem;
+    background: var(--text-muted);
+    margin-top: 0.3rem;
     flex: 0 0 auto;
   }
   .dot.result {
-    background: var(--brand);
-    box-shadow: 0 0 0 4px rgba(40, 87, 214, 0.18);
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(57, 135, 229, 0.2);
   }
   .line {
     width: 2px;
@@ -116,22 +116,23 @@
     margin: 4px 0;
   }
   .body {
-    padding-bottom: 1.4rem;
+    padding-bottom: 1.3rem;
     min-width: 0;
   }
   .head {
-    margin-bottom: 0.55rem;
-  }
-  .head strong {
-    font-size: 1rem;
-    color: var(--ink);
+    margin-bottom: 0.5rem;
   }
   .head .sub {
     display: block;
-    color: var(--ink-3);
-    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
   }
   .result .head strong {
-    color: var(--brand);
+    color: #86b6ef;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dot.result {
+      box-shadow: 0 0 0 3px rgba(57, 135, 229, 0.3);
+    }
   }
 </style>

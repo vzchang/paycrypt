@@ -54,44 +54,41 @@
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    min-width: 2.8ch;
-    padding: 0.45rem 0.4rem 0.35rem;
-    background: var(--surface-alt);
-    border: 1px solid var(--border);
-    border-radius: 6px;
+    min-width: 2.6ch;
+    padding: 0.4rem 0.35rem 0.3rem;
+    background: var(--surface-2);
+    border-radius: 5px;
     border-top: 3px solid var(--tint);
   }
   .binary .cell {
     min-width: 9ch;
   }
   .cell .val {
-    font-size: 0.98rem;
-    color: var(--ink);
+    font-size: 0.95rem;
+    color: var(--text-primary);
     letter-spacing: 0.02em;
   }
   .cell .role {
     font-size: 0.55rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--ink-3);
+    color: var(--text-muted);
   }
   .cell.changed {
-    box-shadow: 0 0 0 2px var(--brand);
-    border-color: var(--brand);
+    box-shadow: 0 0 0 2px var(--accent);
     animation: pop 0.25s ease-out;
   }
   .cell.changed .val {
     font-weight: 700;
-    color: var(--brand);
   }
   @keyframes pop {
     from {
-      transform: scale(0.92);
-      box-shadow: 0 0 0 4px rgba(40, 87, 214, 0.3);
+      transform: scale(0.9);
+      box-shadow: 0 0 0 4px rgba(57, 135, 229, 0.45);
     }
     to {
       transform: scale(1);
-      box-shadow: 0 0 0 2px var(--brand);
+      box-shadow: 0 0 0 2px var(--accent);
     }
   }
   @media (prefers-reduced-motion: reduce) {

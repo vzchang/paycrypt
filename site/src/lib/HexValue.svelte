@@ -24,37 +24,34 @@
   .hexval {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.5rem;
     font-family: var(--mono);
-    font-size: 0.9rem;
-    letter-spacing: 0.03em;
-    color: var(--ink-2);
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
     background: none;
     border: none;
-    padding: 0.2rem 0;
-    min-height: auto;
+    padding: 0.15rem 0;
     cursor: pointer;
     text-align: left;
     word-break: break-all;
-    font-weight: 400;
   }
   .text {
     border-bottom: 1px dashed transparent;
   }
   .hexval:hover .text {
     border-bottom-color: var(--border-strong);
-    color: var(--ink);
+    color: var(--text-primary);
   }
   .tag {
     flex: 0 0 auto;
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--ink-3);
-    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
     border-radius: 999px;
-    padding: 0.1rem 0.5rem;
+    padding: 0.05rem 0.45rem;
     opacity: 0;
     transition: opacity 0.15s;
   }
@@ -63,7 +60,7 @@
     opacity: 1;
   }
   .tag.copied {
-    color: var(--ok);
-    border-color: var(--ok);
+    color: var(--role-pin);
+    border-color: var(--role-pin);
   }
 </style>
