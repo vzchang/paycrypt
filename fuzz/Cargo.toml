@@ -1,3 +1,6 @@
+# Own workspace: cargo-fuzz builds this crate with its own flags.
+[workspace]
+
 [package]
 name = "paycrypt-fuzz"
 version = "0.0.0"

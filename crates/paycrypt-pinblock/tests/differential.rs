@@ -9,8 +9,10 @@ fn to_hex_upper(bytes: &[u8]) -> String {
 }
 
 fn psec_iso0(pin: &str, pan: &str) -> String {
+    // Tests run with the crate dir as CWD; the shim lives at the repo root.
+    let script = concat!(env!("CARGO_MANIFEST_DIR"), "/../../scripts/ref_psec.py");
     let out = Command::new("python3")
-        .args(["scripts/ref_psec.py", "iso0", pin, pan])
+        .args([script, "iso0", pin, pan])
         .output()
         .expect("run ref_psec.py");
     String::from_utf8(out.stdout).unwrap().trim().to_string()
