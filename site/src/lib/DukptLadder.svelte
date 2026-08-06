@@ -3,17 +3,12 @@
   import ByteGrid from "./ByteGrid.svelte";
   import KsnBar from "./KsnBar.svelte";
   import HexValue from "./HexValue.svelte";
-
-  type Step = { label: string; bytes: number[]; hex: string; note: string };
+  import { ksnHex, type Step } from "./dukpt";
 
   // Synthetic demo values (the canonical published test vector).
   let bdk = "0123456789ABCDEFFEDCBA9876543210";
   let counter = 3;
   let binary = false;
-
-  function ksnHex(c: number): string {
-    return "FFFF9876543210E0" + c.toString(16).toUpperCase().padStart(4, "0");
-  }
 
   let steps: Step[] = [];
   $: {

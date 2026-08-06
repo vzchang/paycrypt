@@ -1,7 +1,6 @@
 <script lang="ts">
   import { iso0_steps } from "../../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
-
-  type Step = { label: string; bytes: number[]; hex: string; note: string };
+  import { type Step } from "./dukpt";
 
   let pin = "1234";
   let pan = "5555555551234567";

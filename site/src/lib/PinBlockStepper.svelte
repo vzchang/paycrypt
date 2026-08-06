@@ -2,8 +2,7 @@
   import { iso0_steps } from "../../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
   import ByteGrid from "./ByteGrid.svelte";
   import HexValue from "./HexValue.svelte";
-
-  type Step = { label: string; bytes: number[]; hex: string; note: string };
+  import { type Step } from "./dukpt";
 
   // Synthetic demo values (the canonical psec ISO-0 vector).
   let pin = "1234";

@@ -1,15 +1,10 @@
 <script lang="ts">
   import { tdes_ladder_steps } from "../../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
-
-  type Step = { label: string; bytes: number[]; hex: string; note: string };
+  import { ksnHex, type Step } from "./dukpt";
 
   const BDK = "0123456789ABCDEFFEDCBA9876543210";
   let counter = 1;
   let revealed = false;
-
-  function ksnHex(c: number): string {
-    return "FFFF9876543210E0" + c.toString(16).toUpperCase().padStart(4, "0");
-  }
 
   // One derivation serves both sides: the device holds the IPEK, the host re-derives it from the BDK.
   let steps: Step[] = [];
