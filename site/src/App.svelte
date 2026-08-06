@@ -19,7 +19,7 @@
   <FlowStrip />
 </header>
 
-<main>
+<main class="grid">
   <DukptLadder />
   <PinBlockStepper />
 </main>
@@ -48,6 +48,20 @@
     color: var(--text-secondary);
     font-size: 1.12rem;
     max-width: 56ch;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .grid :global(.panel) {
+    margin: 0;
+  }
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
   }
   footer {
     margin-top: 3rem;
