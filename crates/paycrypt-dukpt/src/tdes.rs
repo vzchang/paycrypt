@@ -121,6 +121,57 @@ pub fn derive_transaction_key(ipek: &InitialKey, ksn: &TdesKsn) -> TransactionKe
     TransactionKey::new(cur_key)
 }
 
+/// Step-instrumented form of [`derive_transaction_key`] for the explainer.
+pub fn derive_transaction_key_steps(
+    ipek: &InitialKey,
+    ksn: &TdesKsn,
+) -> alloc::vec::Vec<crate::steps::Step> {
+    use crate::steps::Step;
+    use alloc::string::ToString;
+    let counter = ksn.transaction_counter();
+
+    let ksn_bytes = ksn.as_bytes();
+    let mut ksn_reg = [0u8; 8];
+    ksn_reg.copy_from_slice(&ksn_bytes[2..10]);
+    let tail = u32::from_be_bytes([ksn_reg[4], ksn_reg[5], ksn_reg[6], ksn_reg[7]]) & !COUNTER_MASK;
+    ksn_reg[4..8].copy_from_slice(&tail.to_be_bytes());
+
+    let mut out = alloc::vec::Vec::new();
+    let mut cur_key = *ipek.as_bytes();
+    out.push(Step::new(
+        "IPEK",
+        &cur_key,
+        "initial key; ladder walks the set bits of the transaction counter",
+    ));
+
+    let mut shift_reg: u32 = 0x10_0000; // bit 20 (MSB of the 21-bit counter)
+    let mut bit_index = 20u32;
+    while shift_reg > 0 {
+        if (shift_reg & counter) != 0 {
+            let tail =
+                u32::from_be_bytes([ksn_reg[4], ksn_reg[5], ksn_reg[6], ksn_reg[7]]) | shift_reg;
+            ksn_reg[4..8].copy_from_slice(&tail.to_be_bytes());
+            cur_key = generate_key(&cur_key, &ksn_reg);
+            let mut label = alloc::string::String::from("generate @ bit ");
+            label.push_str(&bit_index.to_string());
+            out.push(Step::new(
+                label,
+                &cur_key,
+                "counter bit set: derive the next key in the ladder (non-reversible)",
+            ));
+        }
+        shift_reg >>= 1;
+        bit_index = bit_index.saturating_sub(1);
+    }
+
+    out.push(Step::new(
+        "transaction key",
+        &cur_key,
+        "final per-transaction key",
+    ));
+    out
+}
+
 /// Apply a DUKPT variant mask to a transaction key to obtain a working key.
 pub fn apply_variant(key: &TransactionKey, variant: TdesVariant) -> TransactionKey {
     let mask = match variant {

@@ -10,5 +10,6 @@ extern crate alloc;
 
 pub mod aes;
 pub mod codec;
+pub mod steps;
 pub mod tdes;
 pub mod types;
