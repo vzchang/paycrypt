@@ -59,7 +59,7 @@
       <div class="arrows" aria-hidden="true">↘&nbsp;&nbsp;↙</div>
       <div class="key-out" class:show={match}>
         <span class="lbl">transaction key</span>
-        <span class="mono gold">{key}</span>
+        {#key counter}<span class="mono gold">{key}</span>{/key}
         {#if match}<span class="verdict">✓ identical</span>{/if}
       </div>
       <div class="arrows up" aria-hidden="true">↗&nbsp;&nbsp;↖</div>
@@ -169,6 +169,55 @@
   .key-out.show {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+  /* re-key each time the counter changes: the mono value keys= re-animates */
+  .key-out.show .mono.gold {
+    animation: lockin 0.5s cubic-bezier(0.3, 1.3, 0.4, 1);
+  }
+  .arrows {
+    animation: pulse-down 2.2s ease-in-out infinite;
+  }
+  .arrows.up {
+    animation: pulse-up 2.2s ease-in-out infinite;
+  }
+  @keyframes lockin {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.2;
+      filter: blur(2px);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+      filter: none;
+    }
+  }
+  @keyframes pulse-down {
+    0%, 100% {
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(3px);
+    }
+  }
+  @keyframes pulse-up {
+    0%, 100% {
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .key-out.show .mono.gold,
+    .arrows,
+    .arrows.up {
+      animation: none;
+    }
   }
   .key-out .lbl {
     display: block;

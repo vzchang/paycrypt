@@ -153,11 +153,27 @@
   .nib.res {
     background: var(--surface-1);
   }
+  .nib {
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+  }
   .nib.res.hot {
     border-color: var(--accent);
     background: var(--accent-dim);
     color: var(--accent-bright);
     font-weight: 700;
+    transform: scale(1.25);
+  }
+  .nib.pin.hot,
+  .nib.pan.hot {
+    transform: scale(1.15);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nib {
+      transition: none;
+    }
+    .nib.hot {
+      transform: none;
+    }
   }
   .readout {
     min-height: 1.4rem;
