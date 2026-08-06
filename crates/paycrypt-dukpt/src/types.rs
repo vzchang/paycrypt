@@ -110,6 +110,36 @@ impl TdesKsn {
     }
 }
 
+impl TdesKsn {
+    fn with_counter(&self, counter: u32) -> Self {
+        let mut bytes = self.0;
+        let cleared =
+            u32::from_be_bytes([bytes[6], bytes[7], bytes[8], bytes[9]]) & !COUNTER_MASK;
+        let combined = cleared | (counter & COUNTER_MASK);
+        bytes[6..10].copy_from_slice(&combined.to_be_bytes());
+        Self(bytes)
+    }
+
+    /// Advance to the next counter with at most 10 set bits (ANSI X9.24-1), or `None` when exhausted.
+    pub fn next_valid(&self) -> Option<Self> {
+        let mut c = self.transaction_counter();
+        loop {
+            c += 1;
+            if c > COUNTER_MASK {
+                return None;
+            }
+            if is_valid_counter(c) {
+                return Some(self.with_counter(c));
+            }
+        }
+    }
+}
+
+/// Whether a counter fits in 21 bits with at most 10 set bits (ANSI X9.24-1).
+pub fn is_valid_counter(counter: u32) -> bool {
+    counter <= COUNTER_MASK && counter.count_ones() <= 10
+}
+
 impl core::fmt::Debug for TdesKsn {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "TdesKsn({})", codec::to_hex_upper(&self.0))
@@ -138,5 +168,17 @@ mod tests {
         extern crate std;
         let b = Bdk::new([0u8; 16]);
         assert_eq!(std::format!("{b:?}"), "Bdk(<redacted>)");
+    }
+
+    #[test]
+    fn counter_validity_and_skip() {
+        assert!(!is_valid_counter(0x1F_FFFF));
+        assert!(is_valid_counter(0x1));
+        assert!(!is_valid_counter(0x20_0000));
+        let ksn = TdesKsn::from_hex("FFFF9876543210E00007").unwrap();
+        let next = ksn.next_valid().unwrap();
+        assert!(next.transaction_counter() > 7);
+        assert!(is_valid_counter(next.transaction_counter()));
+        assert_eq!(next.initial_key_id(), ksn.initial_key_id());
     }
 }
