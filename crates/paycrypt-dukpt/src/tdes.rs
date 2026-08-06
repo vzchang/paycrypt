@@ -99,6 +99,8 @@ fn generate_key(key: &[u8; 16], ksn_reg: &[u8; 8]) -> [u8; 16] {
 
 /// Derive the per-transaction key, one `GenerateKey` per set counter bit.
 pub fn derive_transaction_key(ipek: &InitialKey, ksn: &TdesKsn) -> TransactionKey {
+    // Duplicates the ladder in derive_transaction_key_steps to stay
+    // allocation-free; tdes_steps_final_equals_oneshot fails if they diverge.
     let counter = ksn.transaction_counter();
 
     let ksn_bytes = ksn.as_bytes();
