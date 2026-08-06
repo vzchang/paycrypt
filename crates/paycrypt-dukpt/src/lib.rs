@@ -9,4 +9,5 @@
 extern crate alloc;
 
 pub mod codec;
+pub mod tdes;
 pub mod types;
