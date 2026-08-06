@@ -4,6 +4,8 @@
   import DukptLadder from "./lib/DukptLadder.svelte";
   import PinBlockStepper from "./lib/PinBlockStepper.svelte";
   import FlowStrip from "./lib/FlowStrip.svelte";
+  import TwoTerminals from "./lib/TwoTerminals.svelte";
+  import XorPlayground from "./lib/XorPlayground.svelte";
 </script>
 
 <header class="hero">
@@ -19,10 +21,14 @@
   <FlowStrip />
 </header>
 
+<TwoTerminals />
+
 <main class="grid">
   <DukptLadder />
   <PinBlockStepper />
 </main>
+
+<XorPlayground />
 
 <footer>
   <p>
