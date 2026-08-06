@@ -1,6 +1,7 @@
 <script lang="ts">
   import { iso0_steps } from "../../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
   import ByteGrid from "./ByteGrid.svelte";
+  import HexValue from "./HexValue.svelte";
 
   type Step = { label: string; bytes: number[]; hex: string; note: string };
 
@@ -51,7 +52,7 @@
             prev={i > 0 ? new Uint8Array(steps[i - 1].bytes) : null}
             {binary}
           />
-          <p class="hex">{step.hex}</p>
+          <HexValue value={step.hex} />
         </li>
       {/each}
     </ol>

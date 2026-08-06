@@ -3,6 +3,7 @@
   import { version } from "../../crates/paycrypt-wasm/pkg/paycrypt_wasm.js";
   import DukptLadder from "./lib/DukptLadder.svelte";
   import PinBlockStepper from "./lib/PinBlockStepper.svelte";
+  import FlowStrip from "./lib/FlowStrip.svelte";
 </script>
 
 <header class="hero">
@@ -14,6 +15,7 @@
     and shows the intermediate derivation state that ordinary calculators hide.
   </p>
   <p class="ver">{version()}</p>
+  <FlowStrip />
 </header>
 
 <DukptLadder />

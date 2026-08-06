@@ -76,8 +76,24 @@
   }
   .cell.changed {
     box-shadow: 0 0 0 2px var(--accent);
+    animation: pop 0.25s ease-out;
   }
   .cell.changed .val {
     font-weight: 700;
+  }
+  @keyframes pop {
+    from {
+      transform: scale(0.9);
+      box-shadow: 0 0 0 4px rgba(57, 135, 229, 0.45);
+    }
+    to {
+      transform: scale(1);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cell.changed {
+      animation: none;
+    }
   }
 </style>
