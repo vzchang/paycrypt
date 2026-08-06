@@ -7,3 +7,5 @@
 //! **Educational and validation use only. Not for production, not audited.**
 
 extern crate alloc;
+
+pub mod codec;
