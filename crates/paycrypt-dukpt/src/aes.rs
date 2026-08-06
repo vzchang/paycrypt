@@ -1,6 +1,8 @@
 //! AES DUKPT (ANSI X9.24-3) key derivation.
 
 use crate::codec;
+use aes::{Aes128, Aes192, Aes256};
+use cipher::{BlockCipherEncrypt, KeyInit};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 /// Key usage indicator (ANSI X9.24-3 §6).
@@ -178,6 +180,70 @@ impl core::fmt::Debug for AesKsn {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "AesKsn({})", codec::to_hex_upper(&self.0))
     }
+}
+
+fn aes_encrypt_block(key: &[u8], block: &[u8; 16]) -> [u8; 16] {
+    let mut buf = *block;
+    match key.len() {
+        16 => Aes128::new_from_slice(key).unwrap().encrypt_block((&mut buf).into()),
+        24 => Aes192::new_from_slice(key).unwrap().encrypt_block((&mut buf).into()),
+        32 => Aes256::new_from_slice(key).unwrap().encrypt_block((&mut buf).into()),
+        _ => panic!("invalid AES key length"),
+    }
+    buf
+}
+
+fn derive_key(key: &[u8], base_data: &[u8; 16], out_len: usize) -> alloc::vec::Vec<u8> {
+    let mut out = alloc::vec::Vec::with_capacity(out_len);
+    let mut block_counter: u8 = 1;
+    while out.len() < out_len {
+        let mut data = *base_data;
+        data[1] = block_counter;
+        let block = aes_encrypt_block(key, &data);
+        out.extend_from_slice(&block);
+        block_counter += 1;
+    }
+    out.truncate(out_len);
+    out
+}
+
+/// Derive the Initial Key (IK) from the BDK and the 8-byte Initial Key ID.
+pub fn derive_initial_key(bdk: &[u8], ik_id: &[u8; 8], ktype: KeyType) -> AesWorkingKey {
+    let data = derivation_data(KeyUsage::InitialKeyDerivation, ktype, 1, ik_id);
+    AesWorkingKey::new(derive_key(bdk, &data, ktype.byte_len()))
+}
+
+/// Derive a per-transaction working key from the Initial Key and KSN.
+pub fn derive_working_key(
+    ik: &[u8],
+    ksn: &AesKsn,
+    usage: KeyUsage,
+    ktype: KeyType,
+) -> AesWorkingKey {
+    let ik_id = ksn.initial_key_id();
+    let counter = ksn.transaction_counter();
+
+    let mut cur = ik.to_vec();
+    let mut applied: u32 = 0;
+    let mut bit: u32 = 0x8000_0000;
+    while bit > 0 {
+        if (counter & bit) != 0 {
+            applied |= bit;
+            let mut ksn_data = [0u8; 8];
+            ksn_data[..4].copy_from_slice(&ik_id[4..8]);
+            ksn_data[4..8].copy_from_slice(&applied.to_be_bytes());
+            // Intermediate derivations carry the IK's key type (X9.24-3).
+            let data = derivation_data(KeyUsage::KeyDerivation, ktype, 1, &ksn_data);
+            cur = derive_key(&cur, &data, ktype.byte_len());
+        }
+        bit >>= 1;
+    }
+
+    let mut ksn_data = [0u8; 8];
+    ksn_data[..4].copy_from_slice(&ik_id[4..8]);
+    ksn_data[4..8].copy_from_slice(&counter.to_be_bytes());
+    let data = derivation_data(usage, ktype, 1, &ksn_data);
+    AesWorkingKey::new(derive_key(&cur, &data, ktype.byte_len()))
 }
 
 #[cfg(test)]
