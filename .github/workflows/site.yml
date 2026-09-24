@@ -18,13 +18,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
       - name: Install wasm-pack
         run: cargo install wasm-pack
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: "20" # any Node >=16 works; the Vite 4 toolchain is verified on Node 16
       - name: Build WASM package
@@ -35,7 +35,7 @@ jobs:
           npm ci || npm install
           npm run build
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: site/dist
 
@@ -45,13 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
       - name: Install wasm-pack
         run: cargo install wasm-pack
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
       - name: Build site
@@ -67,7 +67,7 @@ jobs:
           npx wait-on http://localhost:4173 || sleep 3
           node scripts/screenshot.mjs
       - name: Upload screenshot
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site-screenshot
           path: site/screenshot.png
@@ -81,4 +81,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
