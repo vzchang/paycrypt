@@ -68,6 +68,10 @@
     .grid {
       grid-template-columns: 1fr 1fr;
     }
+    /* the right column never touches the spine, so its node would float in the gap */
+    .grid :global(.panel:nth-child(2)::before) {
+      display: none;
+    }
   }
   footer {
     margin-top: 3rem;
