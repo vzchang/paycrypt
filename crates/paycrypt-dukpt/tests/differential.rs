@@ -22,6 +22,13 @@ fn moov(mode: &str, a: &str, b: &str) -> String {
             .output(),
     }
     .expect("run moov-io reference shim");
+    // A dead shim would otherwise surface as a baffling mismatch against "".
+    assert!(
+        out.status.success(),
+        "moov-io shim failed ({}): {}",
+        out.status,
+        String::from_utf8_lossy(&out.stderr)
+    );
     String::from_utf8(out.stdout).unwrap().trim().to_string()
 }
 

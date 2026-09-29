@@ -15,6 +15,12 @@ fn psec_iso0(pin: &str, pan: &str) -> String {
         .args([script, "iso0", pin, pan])
         .output()
         .expect("run ref_psec.py");
+    assert!(
+        out.status.success(),
+        "psec shim failed ({}): {}",
+        out.status,
+        String::from_utf8_lossy(&out.stderr)
+    );
     String::from_utf8(out.stdout).unwrap().trim().to_string()
 }
 

@@ -1,0 +1,7 @@
+exclude_re = [
+  # The counter bit is always clear before it's set, so `|` and `^` agree:
+  # equivalent mutants that no test can kill.
+  'replace \| with \^ in derive_transaction_key',
+  # `shift_reg >= 0` never terminates; these only ever time out.
+  'replace > with >= in derive_transaction_key',
+]

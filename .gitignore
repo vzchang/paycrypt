@@ -3,3 +3,4 @@ Cargo.lock
 crates/paycrypt-wasm/pkg
 site/node_modules
 site/dist
+mutants.out*
